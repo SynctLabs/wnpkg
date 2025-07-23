@@ -8,7 +8,7 @@
 
 #define RED_PRINT(fmt, ...) printf("%s" fmt "%s", RED, ##__VA_ARGS__, RESET)
 #define GREEN_PRINT(fmt, ...) printf("%s" fmt "%s", GREEN, ##__VA_ARGS__, RESET)
-#define YELLOW_PRINT(fmt, ...)                                                 \
+#define YELLOW_PRINT(fmt, ...) \
   printf("%s" fmt "%s", YELLOW, ##__VA_ARGS__, RESET)
 
 #endif

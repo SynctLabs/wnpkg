@@ -14,12 +14,6 @@ int main(int argc, char* argv[]) {
     return 1;
   }
 
-  char path[1024];
-  char app_name[1024];
-  char config_path[1024];
-  int letter = 0;
-  char c;
-
   YELLOW_PRINT("[Log]: Making Builder folder...\n");
 
   lnpkg_rmr(LNPKG_BUILD_DIR);
@@ -57,6 +51,8 @@ int main(int argc, char* argv[]) {
 
   // Copy index.js into build folder
   sprintf(cmd, "cp %s/index.js lnpkg-build/source/index.js", argv[1]);
+
+  char config_path[1024];
   sprintf(config_path, "%s/lnpkg_config", argv[1]);
 
   if (system(cmd) == 0) {
@@ -108,10 +104,12 @@ int main(int argc, char* argv[]) {
     exit(1);
   }
 
+  char app_name[1024];
   fgets(app_name, sizeof(app_name), fname);
   app_name[strcspn(app_name, "\r\n")] = 0;
 
   // Parse app name until delimiter
+  int letter = 0;
   letter = 0;
   while (app_name[letter] != ';')
     letter++;

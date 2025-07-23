@@ -1,6 +1,6 @@
 CC = gcc
 
-FLAGS = -Iinclude/ -fsanitize=address
+FLAGS = -Iinclude/ -fsanitize=address -Wall
 
 BUILD_DIR             = build
 LNPKG_EXECUTABLE      = lnpkg

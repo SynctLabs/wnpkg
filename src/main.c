@@ -5,7 +5,6 @@
 #include "wnpkg/builder.h"
 #include "wnpkg/color.h"
 #include "wnpkg/file.h"
-#include "wnpkg/plat.h"
 
 int main(int argc, char* argv[]) {
   if (argc < 2) {
@@ -20,11 +19,6 @@ int main(int argc, char* argv[]) {
   int letter = 0;
   char c;
   int use_icon = 0;
-
-  int is_exe = 0;
-#ifdef WNPKG_WINDOWS
-  is_exe = 1;
-#endif
 
   YELLOW_PRINT("[Log]: Making Builder folder...\n");
 
@@ -56,13 +50,6 @@ int main(int argc, char* argv[]) {
     return 1;
   }
 
-  // C program that runs embedded Node.js app
-#ifdef WNPKG_WINDOWS
-  // wnpkg_node_readfromsys("wnpkg-build\\source\\node.c");
-#else
-  // wnpkg_node_readfromsys("wnpkg-build/source/node.c");
-#endif
-
   wnpkg_generate_main();
   wnpkg_generate_node();
   wnpkg_generate_node_s();
@@ -73,13 +60,8 @@ int main(int argc, char* argv[]) {
 #define RESET_CMD() memset(cmd, 0, sizeof(cmd))
 
   // Copy index.js into build folder
-#ifdef WNPKG_WINDOWS
-  sprintf(cmd, "copy %s\\index.js wnpkg-build\\source\\index.js", argv[1]);
-  sprintf(config_path, "%s\\wnpkg_config", argv[1]);
-#else
   sprintf(cmd, "cp %s/index.js wnpkg-build/source/index.js", argv[1]);
   sprintf(config_path, "%s/wnpkg_config", argv[1]);
-#endif
 
   if (system(cmd) == 0) {
     YELLOW_PRINT("[Log]: added index.js in source folder.\n");
@@ -91,12 +73,8 @@ int main(int argc, char* argv[]) {
   }
 
   // Copy package.json into build folder
-#ifdef WNPKG_WINDOWS
-  sprintf(cmd, "copy %s\\package.json wnpkg-build\\source\\package.json",
-          argv[1]);
-#else
   sprintf(cmd, "cp %s/package.json wnpkg-build/source/package.json", argv[1]);
-#endif
+
   if (system(cmd) == 0) {
     YELLOW_PRINT("[Log]: added package.json in source folder.\n");
   } else {
@@ -111,19 +89,11 @@ int main(int argc, char* argv[]) {
 
   // Copy node_modules into build folder
   char folder[1024];
-#ifdef WNPKG_WINDOWS
-  snprintf(folder, sizeof(folder), "%s\\node_modules", argv[1]);
-  if (wnpkg_havedir(folder)) {
-    sprintf(cmd, "xcopy /E /I /Q /Y %s wnpkg-build\\source\\node_modules",
-            folder);
-  }
-#else
   if (wnpkg_havedir(folder)) {
     snprintf(folder, sizeof(folder), "%s/node_modules", argv[1]);
     sprintf(cmd, "cp -rf %s/node_modules wnpkg-build/source/node_modules",
             argv[1]);
   }
-#endif
 
   if (system(cmd) == 0) {
     YELLOW_PRINT("[Log]: added node modules in source folder.\n");
@@ -166,11 +136,8 @@ int main(int argc, char* argv[]) {
   } else {
     // Copy user-defined icon into source folder
     RESET_CMD();
-#ifdef WNPKG_WINDOWS
-    sprintf(cmd, "copy %s\\%s wnpkg-build\\source\\%s", argv[1], icon, icon);
-#else
     sprintf(cmd, "cp %s/index.js wnpkg-build/source/index.js", argv[1]);
-#endif
+
     if (system(cmd) == 0) {
       YELLOW_PRINT("[Log]: added app icon in source folder.\n");
     } else {
@@ -213,32 +180,16 @@ int main(int argc, char* argv[]) {
   // Build executable using GCC (with or without icon)
   RESET_CMD();
   if (use_icon == 0) {
-#ifdef WNPKG_WINDOWS
-    snprintf(cmd, sizeof(cmd),
-             "gcc wnpkg-build/source/app.c wnpkg-build/source/node.s -o "
-             "wnpkg-build/%s.exe "
-             "-Wl,--subsystem,console",
-             app_name);
-#else
     snprintf(cmd, sizeof(cmd),
              "gcc wnpkg-build/source/app.c wnpkg-build/source/node.s -o "
              "wnpkg-build/%s",
              app_name);
-#endif
   } else {
-#ifdef WNPKG_WINDOWS
-    snprintf(cmd, sizeof(cmd),
-             "gcc wnpkg-build/source/app.c wnpkg-build/source/node.s "
-             "wnpkg-build/source/icon.o -mwindows "
-             "-o wnpkg-build/%s.exe -Wl,--subsystem,console",
-             app_name);
-#else
     snprintf(cmd, sizeof(cmd),
              "gcc wnpkg-build/source/app.c wnpkg-build/source/node.s "
              "wnpkg-build/source/icon.o -o "
              "wnpkg-build/%s",
              app_name);
-#endif
   }
 
   if (system(cmd) == 0) {

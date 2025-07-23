@@ -1,17 +1,17 @@
-#include "wnpkg/file.h"
+#include "lnpkg/file.h"
 
 #include <sys/stat.h>
 #include <unistd.h>
 
-int wnpkg_mkdir(char* dir) {
+int lnpkg_mkdir(char* dir) {
   return mkdir(dir, 0755);
 }
 
-int wnpkg_rmdir(char* dir) {
+int lnpkg_rmdir(char* dir) {
   return rmdir(dir);
 }
 
-int wnpkg_havedir(char* dir) {
+int lnpkg_havedir(char* dir) {
   struct stat info;
   if (stat(dir, &info) != 0) {
     return 0;

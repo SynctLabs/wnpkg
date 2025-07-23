@@ -1,29 +1,29 @@
-#include "wnpkg/builder.h"
+#include "lnpkg/builder.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "wnpkg/color.h"
+#include "lnpkg/color.h"
 
-void wnpkg_generate_main() {
+void lnpkg_generate_main() {
   const char* builder =
       "#include <stdlib.h>\n"
       "#include <stdio.h>\n"
-      "#include \"wnpkg.h\"\n\n"
+      "#include \"lnpkg.h\"\n\n"
       "int main(){\n"
-      "  wnpkg_mkdir(\"wnpkg\");\n"
-      "  wnpkg_writenode();\n"
-      "  wnpkg_writeindexjs();\n"
-      "  system(\"chmod +x wnpkg/node\");\n"
-      "  system(\"./wnpkg/node wnpkg/index.js\");\n"
-      "  wnpkg_cleanup();\n"
+      "  lnpkg_mkdir(\"lnpkg\");\n"
+      "  lnpkg_writenode();\n"
+      "  lnpkg_writeindexjs();\n"
+      "  system(\"chmod +x lnpkg/node\");\n"
+      "  system(\"./lnpkg/node lnpkg/index.js\");\n"
+      "  lnpkg_cleanup();\n"
       "  return 0;\n"
       "}";
 
-  FILE* app = fopen("wnpkg-build/source/app.c", "w");
+  FILE* app = fopen("lnpkg-build/source/app.c", "w");
 
   if (app == NULL) {
-    RED_PRINT("[Error]: Writing app in wnpkg-build failed.\n");
+    RED_PRINT("[Error]: Writing app in lnpkg-build failed.\n");
     exit(1);
   }
 
@@ -32,7 +32,7 @@ void wnpkg_generate_main() {
   YELLOW_PRINT("[Log]: Application created successfully.\n");
 }
 
-void wnpkg_generate_node_s() {
+void lnpkg_generate_node_s() {
   char builder[2048] =
       ".global _binary_node_start\n"
       ".global _binary_node_end\n"
@@ -41,15 +41,15 @@ void wnpkg_generate_node_s() {
       "\n"
       ".section .rodata\n"
       "_binary_node_start:\n"
-      "    .incbin \"wnpkg-build/source/node\"\n"
+      "    .incbin \"lnpkg-build/source/node\"\n"
       "_binary_node_end:\n"
       "_binary_indexjs_start:\n"
-      "    .incbin \"wnpkg-build/source/index.js\"\n"
+      "    .incbin \"lnpkg-build/source/index.js\"\n"
       "_binary_indexjs_end:\n";
-  FILE* node_s = fopen("wnpkg-build/source/node.s", "w");
+  FILE* node_s = fopen("lnpkg-build/source/node.s", "w");
 
   if (node_s == NULL) {
-    RED_PRINT("[Error]: Writing node.s in wnpkg-build failed.\n");
+    RED_PRINT("[Error]: Writing node.s in lnpkg-build failed.\n");
     fclose(node_s);
     exit(1);
   }
@@ -58,7 +58,7 @@ void wnpkg_generate_node_s() {
   fclose(node_s);
 }
 
-void wnpkg_generate_wnpkg_h() {
+void lnpkg_generate_lnpkg_h() {
   const char builder[] =
       "#include <stdio.h>\n"
       "#include <stdlib.h>\n"
@@ -71,19 +71,19 @@ void wnpkg_generate_wnpkg_h() {
       "#include <sys/stat.h>\n"
       "#include <unistd.h>\n"
       "\n"
-      "int wnpkg_mkdir(char* dir) {\n"
+      "int lnpkg_mkdir(char* dir) {\n"
       "  return mkdir(dir, 0755);\n"
       "}\n"
       "\n"
-      "int wnpkg_rmdir(char* dir) {\n"
+      "int lnpkg_rmdir(char* dir) {\n"
       "  return rmdir(dir);\n"
       "}\n"
       "\n"
-      "static int wnpkg_writenode() {\n"
+      "static int lnpkg_writenode() {\n"
       "  const unsigned char* node = _binary_node_start;\n"
       "  size_t node_len = (size_t)(_binary_node_end - _binary_node_start);\n"
       "\n"
-      "  FILE* node_f = fopen(\"wnpkg/node\", \"wb\");\n"
+      "  FILE* node_f = fopen(\"lnpkg/node\", \"wb\");\n"
       "\n"
       "  if (!node_f) {\n"
       "    perror(\"fopen\");\n"
@@ -103,12 +103,12 @@ void wnpkg_generate_wnpkg_h() {
       "  return 0;\n"
       "}\n"
       "\n"
-      "static int wnpkg_writeindexjs() {\n"
+      "static int lnpkg_writeindexjs() {\n"
       "  const unsigned char* indexjs = _binary_indexjs_start;\n"
       "  size_t indexjs_len = (size_t)(_binary_indexjs_end - "
       "_binary_indexjs_start);\n"
       "\n"
-      "  FILE* indexjs_f = fopen(\"wnpkg/index.js\", \"wb\");\n"
+      "  FILE* indexjs_f = fopen(\"lnpkg/index.js\", \"wb\");\n"
       "\n"
       "  if (!indexjs_f) {\n"
       "    perror(\"fopen\");\n"
@@ -128,26 +128,26 @@ void wnpkg_generate_wnpkg_h() {
       "  return 0;\n"
       "}\n"
       "\n"
-      "void wnpkg_cleanup() {\n"
-      "  remove(\"wnpkg/index.js\");\n"
-      "  remove(\"wnpkg/node\");\n"
-      "  wnpkg_rmdir(\"wnpkg\");\n"
+      "void lnpkg_cleanup() {\n"
+      "  remove(\"lnpkg/index.js\");\n"
+      "  remove(\"lnpkg/node\");\n"
+      "  lnpkg_rmdir(\"lnpkg\");\n"
       "}";
 
-  FILE* wnpkg_h;
+  FILE* lnpkg_h;
 
-  wnpkg_h = fopen("wnpkg-build/source/wnpkg.h", "w");
+  lnpkg_h = fopen("lnpkg-build/source/lnpkg.h", "w");
 
-  if (!wnpkg_h) {
-    RED_PRINT("[Error]: Writing wnpkg.h in wnpkg-build failed.\n");
+  if (!lnpkg_h) {
+    RED_PRINT("[Error]: Writing lnpkg.h in lnpkg-build failed.\n");
     exit(1);
   }
 
-  fprintf(wnpkg_h, "%s", builder);
-  fclose(wnpkg_h);
+  fprintf(lnpkg_h, "%s", builder);
+  fclose(lnpkg_h);
 }
 
-void wnpkg_generate_node() {
+void lnpkg_generate_node() {
   char cmd[2048];
   int is_exe = 0;
 
@@ -156,7 +156,7 @@ void wnpkg_generate_node() {
     RED_PRINT("[Error]:  Failed to get NODE Bin\n");
     return;
   }
-  sprintf(cmd, "cp %s/bin/node wnpkg-build/source/node", PREFIX);
+  sprintf(cmd, "cp %s/bin/node lnpkg-build/source/node", PREFIX);
 
   if (system(cmd) == 0) {
     YELLOW_PRINT("[Log]: added %s in source folder.\n",

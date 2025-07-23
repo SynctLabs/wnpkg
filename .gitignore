@@ -55,4 +55,4 @@ dkms.conf
 *.dwo
 
 build/
-wnpkg-build/
+lnpkg-build/

@@ -6,6 +6,12 @@
 #include "wnpkg/file.h"
 #include "wnpkg/plat.h"
 
+int wnpkg_haveprg(char* p) {
+  char c[256];
+  snprintf(c, sizeof(c), "command -v %s > /dev/null 2>&1", p);
+  return system(c);
+}
+
 int main(int argc, char *argv[])
 {
   if (argc < 2)
@@ -42,7 +48,7 @@ int main(int argc, char *argv[])
   YELLOW_PRINT("[Log]: Making Builder folder...\n");
 
   // Remove old build folder
-  if (wnpkg_rmdir("wnpkg-build") == 0)
+  if (wnpkg_rmdirr("wnpkg-build") == 0)
   {
     YELLOW_PRINT(
         "[Log]: Old builder folder (wnpkg-build) removed successfully.\n");
@@ -294,7 +300,7 @@ int main(int argc, char *argv[])
   else
   {
     RED_PRINT(
-        "[Error]:  unable to add application executable in build folder.\n");
+        "[Error]: Unable to add application executable in build folder.\n");
   }
 
   // Copy node.exe into the source folder
@@ -304,6 +310,12 @@ int main(int argc, char *argv[])
                "wnpkg-build\\source\\node.exe");
 #else
   char npath[1024];
+
+  if (wnpkg_haveprg("which") != 0) {
+    RED_PRINT("[Error]: Please install 'which' program\n");
+    return 1;
+  }
+
   FILE *fp = popen("which node", "r");
   if(fp == NULL) {
     printf("Error : failed to get node bin.");

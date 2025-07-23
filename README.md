@@ -6,7 +6,6 @@
 
 - Automatically wraps your Node.js script into a standalone executable
 - Includes the Node.js runtime `node`
-- Optional custom icon support (`icon.ico`)
 - Generates a clean build structure in `lnpkg-build/`
 - Super lightweight — written in pure C using `gcc`
 
@@ -51,7 +50,6 @@ lnpkg-build/
 
 ## ⚙️ Optional: Configuration File (`lnpkg_config`)
 
-You can customize the app name and icon by creating a file named `lnpkg_config` in your project folder. This file should contain:
 
 ```
 app-name;

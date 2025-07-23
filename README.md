@@ -1,76 +1,88 @@
-
 # 📦 wnpkg
 
-**wnpkg** is a tiny Windows utility that packages a Node.js application into a portable `.exe` file.
+**wnpkg** is a tiny utility that packages a Node.js application into a portable executable — works on **Windows** and **Linux**.
 
 ## 🚀 Features
 
-- Automatically wraps your Node.js script into an executable
-- Includes `node.exe` inside the build
-- Adds optional custom icon support (`icon.ico`)
-- Generates a complete build directory (`build-last/`)
-- Super lightweight, written in pure C with `gcc`
+- Automatically wraps your Node.js script into a standalone executable
+- Includes the Node.js runtime (`node.exe` on Windows, `node` on Linux)
+- Optional custom icon support (`icon.ico`)
+- Generates a clean build structure in `wnpkg-build/`
+- Super lightweight — written in pure C using `gcc`
 
 ---
 
 ## 🛠️ Usage
 
-```bash
+```
 wnpkg <project-folder>
 ```
 
 This command will:
 
-1. Copy `node.exe` and your `index.js` into a build folder.
+1. Copy `node` (or `node.exe` on Windows) and your `index.js` into a build folder.
 2. Compile a small C launcher using `gcc`.
-3. Output a single `.exe` file in `build-last/`.
+3. Output a single executable:
+   - On **Windows**: `my-app.exe`
+   - On **Linux**: `my-app` (ELF binary without file extension)
 
 ### Example
 
-```bash
+```
 wnpkg my-app
 ```
 
-This will create:
+This will create the following structure:
 
 ```
-build-last/
+wnpkg-build/
 ├── source/
-│   ├── index.js      <-- Your app
-│   └── node.exe      <-- Node runtime
-├── my-app.exe          <-- Final executable
+│   ├── index.js         <-- Your Node.js app
+│   └── node(.exe)       <-- Node.js runtime
+├── my-app(.exe)         <-- Final executable
 ```
 
-Double-click `shop.exe` and your Node app runs instantly.
+- On **Windows**, just double-click `my-app.exe` to run your app.
+- On **Linux**, run it with:
+
+```
+./my-app
+```
 
 ---
 
-## 🎨 Optional: Add Icon
+## 🎨 Optional: Custom Icon
 
-Drop your custom `icon.ico` in the project folder.
+To embed a custom icon in the Windows executable:
 
-If present, `wnpkg` will embed it in the final `.exe`.
+1. Place your `icon.ico` file in the project folder.
+2. `wnpkg` will automatically detect and include it in the `.exe`.
+
+---
+
+## ⚙️ Optional: Configuration File (`wnpkg_config`)
+
+You can customize the app name and icon by creating a file named `wnpkg_config` in your project folder. This file should contain:
+
+```
+app-name;
+icon.ico;
+```
+
+- Replace `app-name` with the desired output name.
+- If you don't want to use an icon, simply use a `*` instead:
+
+```
+my-app;
+*;
+```
 
 ---
 
 ## 📄 Requirements
 
-- Windows (32 or 64 bit)
-- [GCC / MinGW](https://www.mingw-w64.org/) installed and in PATH
-
----
-
-## 💬 Config file (lbuilder)
-
-You can add a custom icon for your project, this file is important for your project name. Create a file named `lbuilder` in your nodejs project, and add the options.
-
-#### A example :
-```txt
-app-name;
-icon.ico;
-```
-
-need be like this, you can change the entry values, and if you don't want to use a icon, you can simple add a "*" in `icon.ico` place.
+- Windows or Linux (32 or 64 bit)
+- [GCC / MinGW](https://www.mingw-w64.org/) installed and available in PATH
 
 ---
 

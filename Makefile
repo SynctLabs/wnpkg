@@ -42,7 +42,6 @@ runtest:
 	cd $(LNPKG_BUILD_DIR) && chmod +x basic_nodejs_proj && ./basic_nodejs_proj
 
 run: $(LNPKG_EXECUTABLE_DIR)
-	rm -rf $(LNPKG_BUILD_DIR)
 	chmod +x $(LNPKG_EXECUTABLE_DIR)
 	./$(LNPKG_EXECUTABLE_DIR) basic_nodejs_proj
 	$(MAKE) runtest
@@ -53,7 +52,6 @@ termux_runtest:
 	cd $(LNPKG_TEMP)/$(LNPKG_BUILD_DIR) && chmod +x basic_nodejs_proj && ./basic_nodejs_proj
 
 termux_run: $(LNPKG_EXECUTABLE_DIR)
-	rm -rf $(LNPKG_BUILD_DIR)
 	mkdir -p $(LNPKG_TEMP)
 	cp $(LNPKG_EXECUTABLE_DIR) $(LNPKG_TEMP)/$(LNPKG_EXECUTABLE)
 	chmod +x $(LNPKG_TEMP)/$(LNPKG_EXECUTABLE)

@@ -6,6 +6,8 @@
 #include "lnpkg/color.h"
 #include "lnpkg/file.h"
 
+#define LNPKG_BUILD_DIR "lnpkg-build"
+
 int main(int argc, char* argv[]) {
   if (argc < 2) {
     printf("Please provide project folder.\n");
@@ -20,18 +22,14 @@ int main(int argc, char* argv[]) {
 
   YELLOW_PRINT("[Log]: Making Builder folder...\n");
 
-  // Remove old build folder
-  if (lnpkg_rmdir("lnpkg-build") == 0) {
-    YELLOW_PRINT(
-        "[Log]: Old builder folder (lnpkg-build) removed successfully.\n");
-  }
+  lnpkg_rmr(LNPKG_BUILD_DIR);
 
   // Create build folder
-  if (lnpkg_mkdir("lnpkg-build") == 0) {
+  if (lnpkg_mkdir(LNPKG_BUILD_DIR) == 0) {
     YELLOW_PRINT("[Log]: Builder folder (lnpkg-build) created successfully.\n");
   } else {
     printf(
-        "[Error]:  Builder folder (lnpkg-build) may already exist or failed to "
+        "[Error]: Builder folder (lnpkg-build) may already exist or failed to "
         "create.\n");
     return 1;
   }
@@ -43,7 +41,7 @@ int main(int argc, char* argv[]) {
         "[Log]: Source folder (lnpkg-build/source) created successfully.\n");
   } else {
     printf(
-        "[Error]:  Source folder (lnpkg-build) may already exist or failed to "
+        "[Error]: Source folder (lnpkg-build) may already exist or failed to "
         "create.\n");
     return 1;
   }
@@ -62,10 +60,10 @@ int main(int argc, char* argv[]) {
   sprintf(config_path, "%s/lnpkg_config", argv[1]);
 
   if (system(cmd) == 0) {
-    YELLOW_PRINT("[Log]: added index.js in source folder.\n");
+    YELLOW_PRINT("[Log]: Added index.js in source folder.\n");
   } else {
     printf(
-        "[Error]:  Unable to move index.js file in target folder, file may not "
+        "[Error]: Unable to move index.js file in target folder, file may not "
         "exist.\n");
     return 1;
   }
@@ -74,10 +72,10 @@ int main(int argc, char* argv[]) {
   sprintf(cmd, "cp %s/package.json lnpkg-build/source/package.json", argv[1]);
 
   if (system(cmd) == 0) {
-    YELLOW_PRINT("[Log]: added package.json in source folder.\n");
+    YELLOW_PRINT("[Log]: Added package.json in source folder.\n");
   } else {
     printf(
-        "[Error]:  Unable to move package.json file in target folder, file may "
+        "[Error]: Unable to move package.json file in target folder, file may "
         "not exist.\n");
     return 1;
   }
@@ -94,10 +92,10 @@ int main(int argc, char* argv[]) {
   }
 
   if (system(cmd) == 0) {
-    YELLOW_PRINT("[Log]: added node modules in source folder.\n");
+    YELLOW_PRINT("[Log]: Added node modules in source folder.\n");
   } else {
     printf(
-        "[Error]:  Unable to move node modules file in target folder, file may "
+        "[Error]: Unable to move node modules file in target folder, file may "
         "not exist.\n");
     return 1;
   }
@@ -105,7 +103,7 @@ int main(int argc, char* argv[]) {
   // Read app name from configuration file
   FILE* fname = fopen(config_path, "r");
   if (fname == NULL) {
-    RED_PRINT("[Error]:  Config file (lnpkg_config) not found.\n");
+    RED_PRINT("[Error]: Config file (lnpkg_config) not found.\n");
     fclose(fname);
     exit(1);
   }
@@ -127,10 +125,10 @@ int main(int argc, char* argv[]) {
            app_name);
 
   if (system(cmd) == 0) {
-    YELLOW_PRINT("[Log]: added application executable in build folder.\n");
+    YELLOW_PRINT("[Log]: Added application executable in build folder.\n");
   } else {
     RED_PRINT(
-        "[Error]:  unable to add application executable in build folder.\n");
+        "[Error]: Unable to add application executable in build folder.\n");
   }
 
   fclose(fname);

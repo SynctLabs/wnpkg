@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
   YELLOW_PRINT("[Log]: Making Builder folder...\n");
 
   // Remove old build folder
-  if (wnpkg_rmdir("wnpkg-build") == 0)
+  if (wnpkg_rmdirr("wnpkg-build") == 0)
   {
     YELLOW_PRINT(
         "[Log]: Old builder folder (wnpkg-build) removed successfully.\n");

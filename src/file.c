@@ -1,9 +1,13 @@
 #include "wnpkg/file.h"
 
+#include <sys/stat.h>
+
 #ifdef WNPKG_WINDOWS
 #include <direct.h>
+#ifndef S_ISDIR
+#define S_ISDIR(m) (((m) & S_IFMT) == S_IFDIR)
+#endif
 #else
-#include <sys/stat.h>
 #include <unistd.h>
 #endif
 
@@ -32,7 +36,7 @@ int wnpkg_havedir(char *dir)
   struct stat info;
   if(stat(dir, &info) != 0) {
     return 0;
-  } else if(info.st_mode & __S_IFDIR) {
+  } else if(S_ISDIR(info.st_mode)) {
     return 1;
   } else {
     return 0;

@@ -46,10 +46,10 @@ int main(int argc, char* argv[]) {
     return 1;
   }
 
-  lnpkg_generate_main();
-  lnpkg_generate_node();
-  lnpkg_generate_node_s();
-  lnpkg_generate_lnpkg_h();
+  lnpkg_write_main();
+  lnpkg_write_node();
+  lnpkg_write_node_s();
+  lnpkg_write_lnpkg_h();
 
   char cmd[2048];
 

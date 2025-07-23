@@ -5,7 +5,7 @@
 
 #include "lnpkg/color.h"
 
-void lnpkg_generate_main() {
+void lnpkg_write_main() {
   const char* builder =
       "#include <stdlib.h>\n"
       "#include <stdio.h>\n"
@@ -32,7 +32,7 @@ void lnpkg_generate_main() {
   YELLOW_PRINT("[Log]: Application created successfully.\n");
 }
 
-void lnpkg_generate_node_s() {
+void lnpkg_write_node_s() {
   char builder[2048] =
       ".global _binary_node_start\n"
       ".global _binary_node_end\n"
@@ -58,7 +58,7 @@ void lnpkg_generate_node_s() {
   fclose(node_s);
 }
 
-void lnpkg_generate_lnpkg_h() {
+void lnpkg_write_lnpkg_h() {
   const char builder[] =
       "#include <stdio.h>\n"
       "#include <stdlib.h>\n"
@@ -147,7 +147,7 @@ void lnpkg_generate_lnpkg_h() {
   fclose(lnpkg_h);
 }
 
-void lnpkg_generate_node() {
+void lnpkg_write_node() {
   char cmd[2048];
   int is_exe = 0;
 

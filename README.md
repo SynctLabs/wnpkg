@@ -73,4 +73,18 @@ This project was built for fun and utility — feel free to hack it, improve it 
 
 ---
 
-## 🐧 Created by Leonardo Pinezi (a.k.a. Shinpi)
+## 🐧 Created by Leonardo Pinezi (a.k.a. Shinpi) & Aquiles Trindade (a.k.a TrindadeDev13)
+
+#### Leonardo Pinezi :
+- Make the original base code and created the project
+- Started the project organization
+- Windows 32/64bit port
+- Fixed bugs
+
+#### Aquiles Trindade :
+- Organized all the entire code
+- Added makefile
+- Added colours and file functions
+- Linux 32/64bits port
+- ELF export
+- Fixed bugs
